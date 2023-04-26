@@ -25,7 +25,10 @@ async function createBooking(userId: number, roomId: number) {
     return userBooking[0];
 }
 
-async function updateBooking( bookingId: number, roomId: number) {
+async function updateBooking(userId: number, bookingId: number, roomId: number) {
+    const userHasBookingAlready = await bookingRepository.findBookingByUserId(userId);
+    if (!userHasBookingAlready || userHasBookingAlready[0].id !== bookingId) throw bookingError();
+
     const room = await bookingRepository.findRoomById(roomId);
     if (!room) throw notFoundError();
 
