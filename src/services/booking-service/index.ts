@@ -7,7 +7,7 @@ import ticketsRepository from "@/repositories/tickets-repository";
 async function listBooking(userId: number) {
     const booking = await bookingRepository.findBookingByUserId(userId);
     if (booking.length === 0) throw notFoundError();
-    return booking;    
+    return booking;
 }
 
 async function createBooking(userId: number, roomId: number) {
@@ -25,8 +25,16 @@ async function createBooking(userId: number, roomId: number) {
     return userBooking[0];
 }
 
-async function updateBooking() {
+async function updateBooking( bookingId: number, roomId: number) {
+    const room = await bookingRepository.findRoomById(roomId);
+    if (!room) throw notFoundError();
 
+    const bookings = await bookingRepository.findBookingsOnRoom(roomId);
+    if (bookings.length === room.capacity) throw bookingError();
+
+    const updateBooking = await bookingRepository.updateBooking(bookingId, roomId);
+
+    return updateBooking;
 }
 
 const bookingService = {
