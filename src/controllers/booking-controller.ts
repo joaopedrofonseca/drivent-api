@@ -4,14 +4,14 @@ import bookingService from "@/services/booking-service";
 import { Certificate } from "crypto";
 import { NextFunction, Request, Response } from "express";
 
-export async function getBooking(req: AuthenticatedRequest, res: Response) {
+export async function getBooking(req: AuthenticatedRequest, res: Response, next: NextFunction) {
     const { userId } = req;
 
     try {
         const booking = await bookingService.listBooking(userId);
         return res.status(200).send(booking)
     } catch (err) {
-        return res.sendStatus(400)
+        next(err);
     }
 }
 
