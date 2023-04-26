@@ -5,8 +5,11 @@ import { Certificate } from "crypto";
 import { NextFunction, Response } from "express";
 
 export async function getBooking(req: AuthenticatedRequest, res: Response) {
-    try {
+    const { userId } = req;
 
+    try {
+        const booking = await bookingService.listBooking(userId);
+        return res.status(200).send(booking)
     } catch (err) {
         return res.sendStatus(400)
     }
@@ -18,7 +21,7 @@ export async function createBooking(req: AuthenticatedRequest, res: Response, ne
 
     try {
         const booking = await bookingService.createBooking(userId, roomId);
-        return res.status(200).send({bookingId: booking.id});
+        return res.status(200).send({ bookingId: booking.id });
     } catch (err) {
         next(err)
     }
