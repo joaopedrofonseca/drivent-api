@@ -9,7 +9,17 @@ export async function getBooking(req: AuthenticatedRequest, res: Response, next:
 
     try {
         const booking = await bookingService.listBooking(userId);
-        return res.status(200).send(booking)
+        return res.status(200).send({
+            id: booking[0].id,
+            Room: {
+                id: booking[0].Room.id,
+                name: booking[0].Room.name,
+                capacity: booking[0].Room.capacity,
+                hotelId: booking[0].Room.hotelId,
+                createdAt: booking[0].Room.createdAt,
+                updatedAt: booking[0].Room.updatedAt
+             }
+        })
     } catch (err) {
         next(err);
     }

@@ -32,9 +32,7 @@ async function createBooking(roomId: number, userId: number) {
 
 async function findBookingByUserId(userId: number) {
     return await prisma.booking.findMany({
-        where: {
-            userId
-        },
+        where: { userId },
         include: { Room: true },
     })
 }
